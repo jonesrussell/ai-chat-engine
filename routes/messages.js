@@ -8,7 +8,10 @@ let ai = apiai(consts.APIAI_CLIENT, consts.APIAI_DEVELOPER);
 router.post('/', function(req, res, next) {
 	// ask something
 	//ask('<Your text query>')
-	ask('Who is the president of china?')
+	let data = req;
+	//console.log(data.query);
+	let message = data.query.message;
+	ask(message)
 		.then(response => {
 			//console.log(response);
 			res.send(response);
