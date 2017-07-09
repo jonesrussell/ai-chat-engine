@@ -9,13 +9,10 @@ let presidents = {
 	'united states of america': 'Donald Trump'
 };
 
-/* GET users listing. */
+/* Webhook for API.AI */
 router.post('/', function(req, res, next) {
 	let data = req.body;
-//	console.log(data.result.parameters);
 	let country = data.result.parameters['geo-country'].toLowerCase();
-	console.log(country);
-	//let response = "Donald Trump";
 	let response = presidents[country];
 	res.setHeader('Content-Type', 'application/json');
 	res.send(JSON.stringify({ 

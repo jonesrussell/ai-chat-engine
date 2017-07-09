@@ -4,17 +4,25 @@ let apiai = require('apiai');
 let consts = require('../constants');
 let ai = apiai(consts.APIAI_CLIENT, consts.APIAI_DEVELOPER);
 
+router.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 /* create a message for the bot. */
 router.post('/', function(req, res, next) {
 	// ask something
 	//ask('<Your text query>')
-	let data = req;
-	//console.log(data.query);
-	let message = data.query.message;
+	let message = req.body.message;
+	console.log(message);
 	ask(message)
 		.then(response => {
-			//console.log(response);
-			res.send(response);
+			let ful = response.result.fulfillment;
+			let answer = {};
+			(typeof ful.displayText != 'undefined') ? answer.text = ful.displayText : answer.text = ful.speech;
+			console.log(answer);
+			res.send(answer);
 		}).catch(error => {
 			//console.log(error)
 			res.send(error);
@@ -40,6 +48,7 @@ function ask(text, options) {
 		let request = ai.textRequest(text, Object.assign(defaultOptions, options));
 
 		request.on('response', (response) => {
+			//console.log(response);
 			return resolve(response);
 		});
 
