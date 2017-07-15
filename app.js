@@ -4,17 +4,20 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var index = require('./app/routes/index');
 var users = require('./app/routes/users');
 let messages = require('./app/routes/messages');
 let aichatdb = require('./app/routes/aichatdb');
+let consts = require('./app/constants');
+let jwt = require('jsonwebtoken');
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
 app.set('view engine', 'hbs');
+
+app.set('tokenSecret', process.env.AIBOT_TOKEN_SECRET); // secret variable
 
 // uncomment after placing your favicon in app/public
 //app.use(favicon(path.join(__dirname, 'app/public', 'favicon.ico')));
@@ -23,6 +26,29 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'app/public')));
+
+app.use(function(req, res, next) {
+	let token = req.body.token || req.query.token || req.headers['x-access-token'];
+	if (typeof token !== 'undefined') {
+		jwt.verify(token, app.get('tokenSecret'), function(err, decoded) {
+			if (err) {
+				return res.json({ success: false, message: 'Failed to authenticate token.' });    
+			} else {
+				// if everything is good, save to request for use in other routes
+				req.decoded = decoded;    
+				next();
+			}
+		});
+	}
+	else {
+		// if there is no token
+		// return an error
+		return res.status(403).send({
+			success: false,
+			message: 'No token provided.'
+		});
+	}
+});
 
 app.use('/', index);
 app.use('/users', users);
