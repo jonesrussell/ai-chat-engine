@@ -10,8 +10,10 @@ let messages = require('./app/routes/messages');
 let aichatdb = require('./app/routes/aichatdb');
 let consts = require('./app/constants');
 let jwt = require('jsonwebtoken');
+let cors = require('cors');
 
 var app = express();
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
