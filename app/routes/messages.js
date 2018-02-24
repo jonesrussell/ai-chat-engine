@@ -20,7 +20,7 @@ router.post('/', function(req, res, next) {
 		.then(response => {
 			let ful = response.result.fulfillment;
 			let answer = {};
-			(typeof ful.displayText != 'undefined') ? answer.text = ful.displayText : answer.text = ful.speech;
+			(typeof ful.displayText !== 'undefined') ? answer.answer = ful.displayText : answer.answer = ful.speech;
 			console.log(answer);
 			res.send(answer);
 		}).catch(error => {
