@@ -10,17 +10,17 @@ let messages = require('./app/routes/messages');
 let aichatdb = require('./app/routes/aichatdb');
 let consts = require('./app/constants');
 let jwt = require('jsonwebtoken');
-//let cors = require('cors');
+let cors = require('cors');
 
 var app = express();
-//app.use(cors());
+app.use(cors());
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
-app.all('*', function(req, res, next) {
+/*app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
-});
+});*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
