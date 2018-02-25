@@ -13,7 +13,7 @@ let jwt = require('jsonwebtoken');
 let cors = require('cors');
 
 var app = express();
-app.use(cors());
+app.use(cors({ methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS' }));
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
 /*app.all('*', function(req, res, next) {
