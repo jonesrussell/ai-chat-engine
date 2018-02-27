@@ -30,7 +30,8 @@ var corsOptions = {
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
 };*/
 //app.use(cors(corsOptions));
-app.use(cors({origin:true,credentials: true}));
+app.use('*', cors({origin:true,credentials: true}));
+app.options('*', cors({origin:true,credentials: true}));
 //app.options('*', cors(corsOptions));
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
