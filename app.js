@@ -29,8 +29,9 @@ var corsOptions = {
 	allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
 };*/
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+//app.use(cors(corsOptions));
+app.use(cors({origin:true,credentials: true}));
+//app.options('*', cors(corsOptions));
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
 /*app.all('*', function(req, res, next) {
