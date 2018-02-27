@@ -14,11 +14,21 @@ let cors = require('cors');
 
 var app = express();
 
-let corsOptions = {
+let whitelist = [
+    'http://localhost:5000',
+];
+var corsOptions = {
+    origin: function(origin, callback){
+        var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+        callback(null, originIsWhitelisted);
+    },
+    credentials: true
+};
+/*let corsOptions = {
 	origin: true,
 	allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
-};
+};*/
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
