@@ -18,6 +18,9 @@ app.use(cors({
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
 }));
 
+app.options('/', cors());
+app.options('/messages', cors());
+
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
 /*app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
