@@ -14,11 +14,12 @@ let cors = require('cors');
 
 var app = express();
 
-app.use(cors({
+let corsOptions = {
 	origin: '*',
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
-}));
-app.options('*', cors());
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
 /*app.all('*', function(req, res, next) {
