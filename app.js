@@ -15,7 +15,7 @@ let cors = require('cors');
 var app = express();
 
 let corsOptions = {
-	origin: '*',
+	origin: true,
 	allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
 };
