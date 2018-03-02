@@ -10,11 +10,11 @@ let messages = require('./app/routes/messages');
 let aichatdb = require('./app/routes/aichatdb');
 let consts = require('./app/constants');
 let jwt = require('jsonwebtoken');
-let cors = require('cors');
+//let cors = require('cors');
 
 var app = express();
 
-let whitelist = [
+/*let whitelist = [
     'http://localhost:5000',
 ];
 var corsOptions = {
@@ -24,14 +24,14 @@ var corsOptions = {
     },
     credentials: true
 };
-/*let corsOptions = {
+let corsOptions = {
 	origin: true,
 	allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
 };*/
 //app.use(cors(corsOptions));
-app.use('*', cors({origin:true,credentials: true}));
-app.options('*', cors({origin:true,credentials: true}));
+//app.use('*', cors({origin:true,credentials: true}));
+//app.options('*', cors({origin:true,credentials: true}));
 //app.options('*', cors(corsOptions));
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
@@ -40,6 +40,21 @@ app.options('*', cors({origin:true,credentials: true}));
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
 });*/
+
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      
+    // intercept OPTIONS method
+    if ('OPTIONS' == req.method) {
+      res.send(200);
+    }
+    else {
+      next();
+    }
+};
+app.use(allowCrossDomain);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
