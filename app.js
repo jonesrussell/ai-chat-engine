@@ -12,7 +12,16 @@ let consts = require('./app/constants');
 let jwt = require('jsonwebtoken');
 //let cors = require('cors');
 
-var app = express();
+const ALLOW_HEADERS = [
+  'Content-Type',
+  'X-Access-Token',
+].join(',');
+const ALLOW_METHODS = [
+  'GET',
+  'POST',
+].join(',');
+
+const app = express();
 
 /*let whitelist = [
     'http://localhost:5000',
@@ -43,9 +52,9 @@ let corsOptions = {
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-      
+    res.header('Access-Control-Allow-Methods', ALLOW_HEADERS);
+    res.header('Access-Control-Allow-Headers', ALLOW_METHODS);
+
     // intercept OPTIONS method
     if ('OPTIONS' == req.method.toUpperCase()) {
       res.send(204).end();
