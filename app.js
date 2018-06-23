@@ -87,8 +87,8 @@ let corsOptions = {
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', ALLOW_HEADERS);
-    res.header('Access-Control-Allow-Headers', ALLOW_METHODS);
+    res.header('Access-Control-Allow-Headers', ALLOW_HEADERS);
+    res.header('Access-Control-Allow-Methods', ALLOW_METHODS);
 
     // intercept OPTIONS method
     if ('OPTIONS' == req.method.toUpperCase()) {
