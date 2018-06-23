@@ -23,6 +23,41 @@ const ALLOW_METHODS = [
 
 const app = express();
 
+function verifySecret(secret) {
+  return function $verifySecret$(req, res, next) {
+    const token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+    //console.log("req", req);
+    console.log("foo");
+    console.log(req.method);
+
+    if (!token) {
+      console.log('no token');
+      // if there is no token
+      // return an error
+
+      return res.status(403).json({
+        success: false,
+        message: 'No token provided.'
+      });
+    }
+
+    jwt.verify(token, secret, function(err, decoded) {
+      if (err) {
+        console.log("Failed to authenticate token.");
+        return res
+          .status(403)
+          .json({ success: false, message: 'Failed to authenticate token.' })
+        ;
+      }
+
+      // if everything is good, save to request for use in other routes
+      req.decoded = decoded;
+      next();
+    });
+  };
+};
+
 /*let whitelist = [
     'http://localhost:5000',
 ];
@@ -69,8 +104,6 @@ app.use(allowCrossDomain);
 app.set('views', path.join(__dirname, 'app/views'));
 app.set('view engine', 'hbs');
 
-app.set('tokenSecret', process.env.AIBOT_TOKEN_SECRET); // secret variable
-
 // uncomment after placing your favicon in app/public
 //app.use(favicon(path.join(__dirname, 'app/public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -79,36 +112,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'app/public')));
 
-app.use(function(req, res, next) {
-	let token = req.body.token || req.query.token || req.headers['x-access-token'];
-	//console.log("req", req);
-	console.log("foo");
-	console.log(req.method);
-	if (typeof token !== 'undefined') {
-		jwt.verify(token, app.get('tokenSecret'), function(err, decoded) {
-			if (err) {
-				console.log("Failed to authenticate token.");
-				return res.json({ success: false, message: 'Failed to authenticate token.' });    
-			} else {
-				// if everything is good, save to request for use in other routes
-				req.decoded = decoded;    
-				next();
-			}
-		});
-	}
-	else {
-		console.log('no token');
-		// if there is no token
-		// return an error
-		
-		return res.status(403).send({
-			success: false,
-			message: 'No token provided.'
-		});
-		
-		//next();
-	}
-});
+app.use(verifySecret(process.env.AIBOT_TOKEN_SECRET));
 
 app.use('/', index);
 app.use('/users', users);
